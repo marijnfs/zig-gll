@@ -9,13 +9,15 @@ fn bootstrap_parse_buffer(buffer: []u8) void {
 
     var it = mem.tokenize(buffer, "\r\n");
 
-    while (it.next()) |line| {}
+    while (it.next()) |line| {
+        std.debug.warn("{}\n", .{line});
+    }
 }
 
 test "TestBootstrap" {
     const allocator = std.heap.page_allocator;
 
-    var buffer = try std.fs.cwd().readFileAlloc(allocator, "./test.txt", 1 >> 30);
+    var buffer = try std.fs.cwd().readFileAlloc(allocator, "test/test.gram", 1 << 30);
 
     bootstrap_parse_buffer(buffer);
 }

@@ -1,2 +1,6 @@
-S 'a' d
-X a
+S 'a' d | 'z'
+X a 'a a'
+
+Z b 'b b'
+
+

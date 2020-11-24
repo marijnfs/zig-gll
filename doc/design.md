@@ -10,6 +10,19 @@ Enums:
 - Return
 - End
 
+Internal Structs:
+================
+#NodeIndex
+- cursor: int
+- rule: int
+- id: int
+- prev: int
+> cmp(other: NodeIndex) bool
+
+Nodeindex is unique for a given cursor+rule. This gives us the cap on memory usage and efficiency (dynamic algorithm).
+Has a comparator to distinguish if a new node needs to be created or just adjusted
+
+
 Structs:
 =======
 #RuleSet
@@ -20,6 +33,20 @@ Structs:
 - returns: []int              #begin rule for End types
 
 
+#Parser
+- ruleset: Ruleset
+- heads: priority_queue(NodeIndex)  #Main active queue for parsing
+
+- nodes: NodeIndex
+- properties: int             #index pointing to node with info
+- parents: []set(int)         #Spawning node for this rule
+- prevs: []int                #pointing to previous rule in a sequence
+
+- node_occurence: set(NodeIndex) #faster data structure to check if node exists already
+
+- crumbs: []set(int)          #Used in reading out the parse graph
+- end_node: int               #Index of end node, for deparsing
+- furthest: int               #Cursor of furthest parsing node, for giving errors
 
 Result Structs:
 ==============

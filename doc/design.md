@@ -30,6 +30,8 @@ Structs:
 - types: []RuleType
 - arguments [nargs][]int      #inputs for Option types
 - matcher: []?RE2Matcher      #matchers for Match types
+
+                              !Not used in Code?#
 - returns: []int              #begin rule for End types
 
 
@@ -47,6 +49,13 @@ Structs:
 - crumbs: []set(int)          #Used in reading out the parse graph
 - end_node: int               #Index of end node, for deparsing
 - furthest: int               #Cursor of furthest parsing node, for giving errors
+
++ Provides query operations like:
+  + get_all(type) for one node, or recursively
+  + squeeze, for recursive nodes that we would want in sequence (like having all lines in a block under one node)
+  + cleanup, remove nodes of certain types and compact them
+  + visitor, visit functionality, bottom up and top down, pass through or not
++ Has pretty printing functionality
 
 Result Structs:
 ==============

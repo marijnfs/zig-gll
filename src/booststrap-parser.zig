@@ -12,6 +12,7 @@ const RuleMap = std.StringHashMap(u8);
 fn bootstrap_parse_buffer(buffer: []u8) !RuleMap {
     var heap_allocator = std.heap.ArenaAllocator.init(std.heap.page_allocator);
     errdefer heap_allocator.deinit();
+
     var allocator = &heap_allocator.allocator;
 
     var rule_map = RuleMap.init(allocator);

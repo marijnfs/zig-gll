@@ -101,14 +101,59 @@ An Option spawns several possible other nodes. E.g. perhaps a _line_ can be a _s
 
 Defined with an | Symbol
 
+
 Return
 ------
 Marks the end of a sequence of rules, time to return to whoever spawned it.
 Just like a function call.
 
+
 End
 ---
 Marks the end of the Parse. Could perhaps also be done with Return, but it's convenient to be explicit about it.
+
+
+Parsing Algorithm:
+=================
+Meat of the whole thing.
+
+- Priority queue of NodeIndex, sorted by cursor, then rule number
+
+```
+Push root node at cursor 0, rule 0 (Root Rule) to queue.
+
+while node = pop()
+  switch node.type
+  => Match
+     match *pattern* from current cursor.
+     If match:
+       Push node at new cursor, with rule = rule + 1.
+       Parent is same as current parent
+       # Here we need to check if node is already spawned! Dynamic Algorithm point
+       # E.g. match could be 'a+', and we were called on $aaab and another on a$aab because of some rules.
+       # Now point aaa$b will be called two times!
+  => Option
+     	for all rules to spawn (stored in args)
+           Push node at current cursor, with given rule
+           Parent is current node
+           # Here we need to check if node is already spawned! Dynamic Algorithm point
+           # If node exists, it might already have returned!
+           # Then we would need to perform the return operation again for this new parent
+           # We can get the 'end cursors' of this rule if it has been returned, and simply return from there and start rule + 1 there.
+           # ! However, just like 'match' the next rule might already have been spawned!
+           # So same check applies
+  => Return
+  		Make sure we record the end of this rule.
+  		For all parents:
+  		   Start rule + 1 at cursor.
+  		   # Can this rule be spawned twice as well?
+  		   # S 'a' bla 'b' | bla 'b'
+  		   # bla '[a]+'
+  		   # I guess so! a(aa)^b (aaa)^b
+  => End
+     check if cursor = final char.
+     p.s. could also be done with return on top node? Just check if there are 0 nodes? Would reduce rules
+```
 
 
 Bootstrap:

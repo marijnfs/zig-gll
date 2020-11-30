@@ -9,7 +9,7 @@ const Mode = enum { BLANK, READFIRST, READ, ESCAPESINGLE, ESCAPEDOUBLE };
 // const RuleMap = std.AutoHashMap([]const u8, [][][]const u8);
 const RuleMap = std.StringHashMap([][][]u8);
 
-pub fn bootstrap_parse_buffer(buffer: []u8) !RuleMap {
+pub fn bootstrap_parse_buffer(buffer: []const u8) !RuleMap {
     var heap_allocator = std.heap.ArenaAllocator.init(std.heap.page_allocator);
     errdefer heap_allocator.deinit();
 

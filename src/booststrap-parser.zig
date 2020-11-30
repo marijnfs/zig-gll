@@ -7,9 +7,9 @@ const warn = std.debug.warn;
 const Mode = enum { BLANK, READFIRST, READ, ESCAPESINGLE, ESCAPEDOUBLE };
 
 // const RuleMap = std.AutoHashMap([]const u8, [][][]const u8);
-const RuleMap = std.StringHashMap(u8);
+const RuleMap = std.StringHashMap([][][]u8);
 
-fn bootstrap_parse_buffer(buffer: []u8) !RuleMap {
+pub fn bootstrap_parse_buffer(buffer: []u8) !RuleMap {
     var heap_allocator = std.heap.ArenaAllocator.init(std.heap.page_allocator);
     errdefer heap_allocator.deinit();
 
@@ -116,7 +116,7 @@ fn bootstrap_parse_buffer(buffer: []u8) !RuleMap {
         if (options.items.len > 0 and rulename.items.len > 0) {
             var owned_slice = rulename.toOwnedSlice();
             warn("owned: '{}'\n", .{owned_slice});
-            try rule_map.put(owned_slice, 3); //options.toOwnedSlice());
+            try rule_map.put(owned_slice, options.toOwnedSlice());
         }
     }
 
@@ -130,7 +130,7 @@ const expectEqual = testing.expectEqual;
 test "TestBootstrap" {
     const allocator = std.heap.page_allocator;
 
-    var buffer = try std.fs.cwd().readFileAlloc(allocator, "test/test.gram", 1 << 30);
+    var buffer = try std.fs.cwd().readFileAlloc(allocator, "../test/test.gram", 1 << 30);
 
     var rule_map = try bootstrap_parse_buffer(buffer);
 

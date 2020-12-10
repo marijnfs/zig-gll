@@ -15,5 +15,9 @@ test "Boostrap Parse Test" {
         "b 'asdf'";
     var ruleset = bootstrap_to_ruleset(buffer[0..]);
 
+
+    var parser: Parser {.ruleset = ruleset};
+    parser.parse(buffer);
+
     warn("Test\n", .{});
 }

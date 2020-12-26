@@ -64,6 +64,10 @@ pub const RuleSet = struct {
     pub fn allocator(self: *RuleSet) *std.mem.Allocator {
         return &self.arena.allocator;
     }
+
+    pub fn size(self: *RuleSet) usize {
+        return self.names.items.len;
+    }
 };
 
 test "RuleSet Test" {

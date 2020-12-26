@@ -12,11 +12,11 @@ Enums:
 
 Internal Structs:
 ================
-#NodeIndex
-- cursor: int
-- rule: int
-- id: int
-- prev: int
+#IndexNode
+- cursor: int                 # buffer position
+- rule: int                   # Rule index in ruleset
+- id: int                     # Index in the parsing datastructure
+- prev: int                   
 > cmp(other: NodeIndex) bool
 
 Nodeindex is unique for a given cursor+rule. This gives us the cap on memory usage and efficiency (dynamic algorithm).
@@ -59,6 +59,8 @@ Structs:
 
 Result Structs:
 ==============
+
+Parse graph is a tree like structure. Must be read out of the Parser
 
 #ParseNode              #Represents Parse Tree
 - n: int                #index, -1 is invalid default state

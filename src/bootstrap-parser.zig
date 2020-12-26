@@ -11,7 +11,7 @@ const Mode = enum { BLANK, READFIRST, READ, ESCAPESINGLE, ESCAPEDOUBLE };
 // const RuleMap = std.AutoHashMap([]const u8, [][][]const u8);
 const RuleMap = std.StringHashMap([][][]u8);
 
-const bootstrap = struct {
+pub const bootstrap = struct {
     pub fn ruleset_from_buffer(buffer: []const u8) !RuleSet {
         const allocator = std.heap.page_allocator;
 
@@ -218,5 +218,12 @@ test "Bootstrap Ruleset Test" {
 
     var buffer = "a 'sdf' 'asdf' | 'asdf' 'fds'\n" ++
         "b 'asdf'";
-    var ruleset = bootstrap.ruleset_from_buffer(buffer[0..]);
+    var ruleset = try bootstrap.ruleset_from_buffer(buffer[0..]);
+    var ruleid_a = ruleset.name_index("a");
+    var ruleid_b = ruleset.name_index("b");
+    warn("rulea: {} ruleb: {}\n", .{ ruleid_a, ruleid_b });
+    var i: usize = 0;
+    while (i < ruleset.size()) : (i += 1) {
+        warn("rule: {} / {}\n", .{ ruleset.names.items[i], ruleset.types.items[i] });
+    }
 }
